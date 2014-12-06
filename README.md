@@ -1,4 +1,4 @@
-﻿飛んで行こ！(Team-Upward)
+﻿Team-Upward
 ======================
 
 This is a 4 to 40 player  platformer. Players
