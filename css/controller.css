@@ -1,0 +1,159 @@
+/*
+ * Copyright 2014, Gregg Tavares.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer
+ * in the documentation and/or other materials provided with the
+ * distribution.
+ *     * Neither the name of Gregg Tavares. nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+html, body {
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: #222;
+}
+#buttons {
+    position: absolute;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.button, .button2 {
+    background-color: #8AF;
+    color: #FFF;
+    border: 3px solid #444;
+    padding: 0.3em;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+#next1 {
+    margin-top: 0.5em;
+}
+.button2 {
+    background-color: gray;
+}
+
+#android {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-size: xx-large;
+  color: white;
+  text-align: center;
+}
+
+#end0, #end1 {
+   color: white;
+   position: absolute;
+   left: 0px;
+   top: 0px;
+   z-index: 20;
+   text-align: center;
+   font-size: xx-large;
+   font-weight: bold;
+}
+#end0 .head {
+   background-color: #34F;
+   padding: 3px;
+   width: 100%;
+}
+#end0 .rank {
+    text-align: left;
+    display: inline-block;
+    font-size: x-large;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#end0 {
+    background-color: blue;
+}
+#end0 .grp0 {
+    clear: both;
+    padding: 0px;
+    margin: 0px;
+}
+
+#end0 .col {
+    display: block;
+    float:left;
+    gmargin: 1% 0 1% 1.6%;
+}
+
+#end0 .grp0:before,
+#end0 .grp0:after {
+    content:"";
+    display:table;
+}
+#end0 .grp0:after {
+    clear:both;
+}
+
+
+#end0 .col1 {
+    width: 60%;
+    border-left: 5px solid black;
+}
+#end0 .col0 {
+    width: 40%;
+}
+
+#end1 {
+   background-color: black;
+   font-size: x-large;
+}
+
+#end1 strong {
+   background-color: red;
+   font-size: larger;
+   display: block;
+   margin-top: 0.5em;
+   margin-bottom: 0.5em;
+   padding: 0.5em;
+   width: 100%;
+}
+
+@media only screen and (max-height : 208px) {
+    .button {
+        bottom: 22px;
+    }
+    #avatar {
+      left: 56%;
+      width: 64px;
+      height: 64px;
+      bottom: 52px;
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    #end0 .col {
+        width: 100%;
+    }
+
+    #end1 .cold {
+        width: 100%;
+    }
+}
