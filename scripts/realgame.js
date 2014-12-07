@@ -555,7 +555,7 @@ window.g = globals;
 
   var  checkPlayerReachedTop = function(player) {
     var y = (player.position[1]);
-    if (y < (g_levelHeight - g_yScrollOffset) - (19*32))
+    if (y > 0 && y < (g_levelHeight - g_yScrollOffset) - (19*32))
     {
         g_yScrollOffsetTarget = g_yScrollOffset + 19*32;
         g_scrollState = 1;
