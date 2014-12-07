@@ -82,7 +82,7 @@ define(
   var g_oldOrientation;
   var g_spinner;
   var g_score = 0;
-  var g_playerCookie = new Cookie("hft-tondeiko-player");
+  var g_playerCookie = new Cookie("hft-teamupward-player");
   var g_points = [];
   var g_oldLetter = [
     {},

@@ -112,6 +112,10 @@ window.s = g_services;
   g_services.playerManager = g_playerManager;
   g_services.misc = Misc;
   var stop = false;
+  var g_scrollState = 0;  // 0 = not scrolling, 1 = scrolling
+  var g_yScrollOffset = 0;  // current level scroll offset (starts at 0 at bottom of level)
+  var g_yScrollOffsetTarget = 0;
+  var g_levelHeight;
 
   // You can set these from the URL with
   // http://path/gameview.html?settings={name:value,name:value}
@@ -509,7 +513,7 @@ window.g = globals;
       GameSupport.run(globals, mainloop);
     };
 
-    document.title = "Tonde-Iko: " + (globals.levelName ? globals.levelName : "*level*");
+    document.title = "Team-Upward: " + (globals.levelName ? globals.levelName : "*level*");
     if (globals.levelName) {
       var realImageMappings = {
         "assets/bricks.png": "assets/bricks-real.png",
@@ -549,6 +553,15 @@ window.g = globals;
     }
   }(gl.clear.bind(gl));
 
+  var  checkPlayerReachedTop = function(player) {
+    var y = (player.position[1]);
+    if (y < (g_levelHeight - g_yScrollOffset) - (19*32))
+    {
+        g_yScrollOffsetTarget = g_yScrollOffset + 19*32;
+        g_scrollState = 1;
+    }
+    return false;
+  }
   var mainloop = function() {
     resize();
     g_services.levelManager.getDrawOffset(globals.drawOffset);
@@ -640,6 +653,29 @@ window.g = globals;
 
     g_services.debugRenderer.draw(globals.drawOffset);
     g_services.status.draw();
+
+    if (isNaN(level.yScrollOffset)) {
+      level.yScrollOffset = 0.0;
+    }
+    if (g_scrollState == 0) {
+      // check if a player reached near the top.
+      g_levelHeight = level.levelHeight;
+      g_playerManager.forEachPlayer(checkPlayerReachedTop);
+      
+    } else {
+      if ( ! isNaN(g_services.globals.elapsedTime)) {
+        var amount = g_services.globals.elapsedTime*(32 * 4);
+        g_yScrollOffset += amount;
+        if (g_yScrollOffset > g_yScrollOffsetTarget) {
+          g_yScrollOffset = g_yScrollOffsetTarget;
+          g_scrollState = 0;
+        }
+        level.yScrollOffset = g_yScrollOffset; 
+      } 
+    
+    } 
+
+
   };
 
   var sounds = {

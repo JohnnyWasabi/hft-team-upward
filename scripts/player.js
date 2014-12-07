@@ -74,7 +74,7 @@ define([
    * @constructor
    */
   var Player = (function() {
-    return function(services, width, height, direction, name, netPlayer, startPosition, data, isLocalPlayer) {
+    return function(services, width, height, direction, name, netPlayer, startPosition, data, isLocalPlayer, teamIndex) {
       var isNewPlayer = data === undefined;
       data = data || {};
       var globals = services.globals;
@@ -90,6 +90,7 @@ define([
       this.isLocalPlayer = isLocalPlayer;
       this.hasHat = false;
       this.hasGift = data.hasGift || false;
+      this.teamIndex = teamIndex; // 0 = team read,  = team blue
 
       this.sprite = this.services.spriteManager.createSprite();
       this.nameSprite = this.services.spriteManager.createSprite();
@@ -115,7 +116,7 @@ define([
 
       netPlayer.addEventListener('disconnect', Player.prototype.handleDisconnect.bind(this));
       netPlayer.addEventListener('move', Player.prototype.handleMoveMsg.bind(this));
-//fixthis      netPlayer.addEventListener('jump', Player.prototype.handleJumpMsg.bind(this));
+      netPlayer.addEventListener('jump', Player.prototype.handleJumpMsg.bind(this));
       netPlayer.addEventListener('busy', Player.prototype.handleBusyMsg.bind(this));
       netPlayer.addEventListener('go', Player.prototype.handleGoMsg.bind(this));
       netPlayer.addEventListener('setName', function() {});
@@ -125,6 +126,8 @@ define([
       this.facing = data.facing || direction;    // direction player is facing (-1, 1)
       this.score = data.score || 0;
 //      this.addPoints(0);
+
+      this.teleUpDest = [0,0];
 
       this.posDestTeleport = [0,0];
       this.reset(startPosition);
@@ -182,11 +185,12 @@ define([
       this.playerName = name;
       nameFontOptions.prepFn = function(ctx) {
 
-        var h = (this.avatar.baseHSV[0] + this.color.h) % 1;
-        var s = gmath.clamp(this.avatar.baseHSV[1] + this.color.s, 0, 1);
-        var v = gmath.clamp(this.avatar.baseHSV[2] + this.color.v, 0, 1);
+        
+        var h = (this.teamIndex == 0) ? 0 : 0.677; //(this.avatar.baseHSV[0] + this.color.h) % 1;
+        var s = 1; //gmath.clamp(this.avatar.baseHSV[1] + this.color.s, 0, 1);
+        var v = 1; //gmath.clamp(this.avatar.baseHSV[2] + this.color.v, 0, 1);
         var brightness = (0.2126 * this.avatar.baseColor[0] / 255 + 0.7152 * this.avatar.baseColor[1] / 255 + 0.0722 * this.avatar.baseColor[2] / 255);
-        nameFontOptions.fillStyle = brightness > 0.6 ? "black" : "white";
+        nameFontOptions.fillStyle = "white"; //brightness > 0.6 ? "black" : "white";
         var rgb = ImageUtils.hsvToRgb(h, s, v);
         ctx.beginPath();
         CanvasUtils.roundedRect(ctx, 0, 0, ctx.canvas.width, ctx.canvas.height, 10);
@@ -585,6 +589,15 @@ define([
     }
   };
 
+  Player.prototype.TeleportUp = function(positionDest)  {
+            this.posDestTeleport[0] =  positionDest[0];
+            this.posDestTeleport[1] =  positionDest[1];
+            this.statePrevTeleport = this.state;
+            this.velocity[0] = 0;
+            this.velocity[1] = 0;
+            this.setState("teleport");
+  };
+
   Player.prototype.checkFall = function() {
     var globals = this.services.globals;
     var levelManager = this.services.levelManager;
@@ -874,6 +887,26 @@ define([
     sprite.width  = width  * globals.scale * this.scale;
     sprite.height = height * globals.scale * this.scale;
     sprite.xScale = this.facing > 0 ? 1 : -1;
+
+    if (this.state != "teleport" && sprite.y > (22*32)) { //ctx.canvas.height) {
+      if (!this.FindTeleUpDest) {
+        this.FindTeleUpDest = function(player) {
+          if (player == this) return false;
+          if (player.position[1] < this.teleUpDest[1]) {
+            this.teleUpDest[0] = player.position[0];
+            this.teleUpDest[1] = player.position[1];
+          }
+          return true;
+        }.bind(this);
+      }
+      this.gotTeamTeleUp = false;
+      this.teleUpDest[0] = this.position[0];
+      this.teleUpDest[1] = this.position[1];
+      this.services.playerManager.forEachPlayer(this.FindTeleUpDest);
+      if (this.teleUpDest[1] < this.position[1]) {
+        this.TeleportUp(this.teleUpDest);
+      }
+    }
 
     var dyName = 0;
     if (this.hasGift) {

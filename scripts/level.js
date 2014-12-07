@@ -41,6 +41,8 @@ define([
     var height = options.height;
     var tiles = options.tiles;
 
+    Level.yScrollOffset = 0.0;
+
     this.name = options.name;
     this.width = width;
     this.height = height;
@@ -127,7 +129,9 @@ define([
     if (this.isSetup) {
       return;
     }
+
     this.isSetup = true;
+    Level.yScrollOffset = 0.0;
     // find stuff
     for (var yy = 0; yy < this.height; ++yy) {
       for (var xx = 0; xx < this.width; ++xx) {
@@ -201,7 +205,7 @@ define([
 
   Level.prototype.getDrawOffset = function(obj) {
     obj.x = ((gl.canvas.width  - this.levelWidth ) / 2) | 0;
-    obj.y = ((gl.canvas.height - this.levelHeight) / 2) | 0;
+    obj.y = (-(this.levelHeight - gl.canvas.height ) + Math.floor(this.yScrollOffset)) | 0;
   };
 
   Level.prototype.setTile = function(tx, ty, tileId) {

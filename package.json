@@ -1,11 +1,11 @@
 {
-  "name": "Tonde-Iko",
-  "description": "A multi-player platformer that runs across multiple monitors and machines",
+  "name": "Team-Upward",
+  "description": "A multi-player platformer where teams of players race upward",
   "version": "0.0.0",
   "private": false,
   "dependencies": {},
   "happyFunTimes": {
-    "gameId": "tonde-iko",
+    "gameId": "team-upward",
     "category": "game",
     "apiVersion": "1.4.0",
     "gameType": "html",

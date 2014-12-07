@@ -181,6 +181,7 @@ define([
   var LevelManager = function(services, tileset, options) {
     options = options || {};
     this.services = services;
+    this.services.globals.elapsedTime = 0.0;
     this.tileset = tileset;
     this.offEdgeTileId = options.offEdgeTileId !== undefined ? options.offEdgeTileId : 13;
     this.offTopBottomTileID = options.offTopBottomTileId !== undefined ? options.offTopBottomTileId : 1;

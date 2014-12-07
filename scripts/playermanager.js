@@ -38,6 +38,8 @@ define([
   var PlayerManager = function(services) {
     this.services = services;
     this.players = [];
+    this.playersRed = [];
+    this.playersBlue = [];
   };
 
   PlayerManager.prototype.startPlayer = function(netPlayer, name, data, isLocalPlayer) {
@@ -82,8 +84,14 @@ define([
         direction = startPosition.x < level.levelWidth / 2 ? 1 : -1;
       }
     }
-    var player = new Player(this.services, level.tileWidth, level.tileHeight, direction, name, netPlayer, startPosition, data, isLocalPlayer);
+    var team = (this.playersRed.length < this.playersBlue.length) ? 1 : 0;
+    var player = new Player(this.services, level.tileWidth, level.tileHeight, direction, name, netPlayer, startPosition, data, isLocalPlayer, team);
     this.players.push(player);
+    if (team = 0) {
+      this.playersRed.push(player);
+    } else {
+      this.playersBlue.push(player);
+    }
     return player;
   }
 
