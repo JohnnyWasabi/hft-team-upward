@@ -67,6 +67,7 @@ requirejs(
     './particlesystemmanager',
     './playermanager',
     './scoremanager',
+    './canvas-utils',
   ], function(
     GameServer,
     GameSupport,
@@ -98,7 +99,8 @@ requirejs(
     ParticleEmitter,
     ParticleSystemManager,
     PlayerManager,
-    ScoreManager) {
+    ScoreManager,
+    CanvasUtils) {
 
   var g_debug = false;
   var g_services = {};
@@ -165,6 +167,8 @@ window.s = g_services;
     smallCoinScale: 0.75,
     allowStandOnPlayers: true,
     allowStoodOnToBumpYou: true,
+
+    teamScoreInts:[0,0],
 
     drawOffset: {},
   };
@@ -562,6 +566,53 @@ window.g = globals;
     }
     return false;
   }
+
+  var nameFontOptions = {
+    font: "20px sans-serif",
+    xOffset: 1,
+    yOffset: 18,
+    height: 20,
+    padding: 3,
+    fillStyle: "white",
+  };
+
+  var teamScoreStrings =["0", "0"];
+  var teamScoreSprites =[0,0];
+  var teamScoreImages = [0,0];
+  var teamScoreIntsDisplayed = [-1,-1];
+  teamScoreSprites[0] = g_services.spriteManager.createSprite();
+  teamScoreSprites[1] = g_services.spriteManager.createSprite();
+  var setTeamScore = function(teamIndex) {
+    if (teamScoreIntsDisplayed[teamIndex] != globals.teamScoreInts[teamIndex]) {
+      teamScoreIntsDisplayed[teamIndex] = globals.teamScoreInts[teamIndex];
+      name = teamScoreIntsDisplayed[teamIndex].toString();
+      nameFontOptions.prepFn = function(ctx) {
+        var h = (teamIndex == 0) ? 0 : 0.677; //(this.avatar.baseHSV[0] + this.color.h) % 1;
+        var s = 1; //gmath.clamp(this.avatar.baseHSV[1] + this.color.s, 0, 1);
+        var v = 1; //gmath.clamp(this.avatar.baseHSV[2] + this.color.v, 0, 1);
+        nameFontOptions.fillStyle = "white"; //brightness > 0.6 ? "black" : "white";
+        var rgb = ImageUtils.hsvToRgb(h, s, v);
+        ctx.beginPath();
+        CanvasUtils.roundedRect(ctx, 0, 0, ctx.canvas.width, ctx.canvas.height, 10);
+        ctx.fillStyle = "rgb(" + rgb.join(",") + ")";
+        ctx.fill();
+      }.bind(this);
+
+      teamScoreImages[teamIndex] = createTexture(
+          ImageUtils.makeTextImage(name, nameFontOptions));
+
+      var nameSprite = teamScoreSprites[teamIndex];
+      var nameImage = teamScoreImages[teamIndex];
+      nameSprite.uniforms.u_texture = nameImage;
+      nameSprite.x = ((40*32)/4  + ((40*32)/2 * teamIndex)) * globals.scale;
+      nameSprite.y = 32 * globals.scale;
+      nameSprite.width  = nameImage.img.width  * globals.scale;
+      nameSprite.height = nameImage.img.height * globals.scale;
+    }
+  };
+  setTeamScore(0);
+  setTeamScore(1);
+
   var mainloop = function() {
     resize();
     g_services.levelManager.getDrawOffset(globals.drawOffset);
@@ -660,7 +711,9 @@ window.g = globals;
     if (g_scrollState == 0) {
       // check if a player reached near the top.
       g_levelHeight = level.levelHeight;
-      g_playerManager.forEachPlayer(checkPlayerReachedTop);
+      if (g_playerManager.players.length > 1) {
+        g_playerManager.forEachPlayer(checkPlayerReachedTop);
+      }
       
     } else {
       if ( ! isNaN(g_services.globals.elapsedTime)) {
@@ -674,7 +727,8 @@ window.g = globals;
       } 
     
     } 
-
+    setTeamScore(0);
+    setTeamScore(1);
 
   };
 

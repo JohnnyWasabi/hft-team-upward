@@ -596,6 +596,7 @@ define([
             this.velocity[0] = 0;
             this.velocity[1] = 0;
             this.setState("teleport");
+            this.services.globals.teamScoreInts[1-this.teamIndex] += 1;
   };
 
   Player.prototype.checkFall = function() {
