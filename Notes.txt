@@ -1,0 +1,8 @@
+How to submit changes to repository on Git:
+git add .
+git commit
+git push origin master
+	JohnnyWasabi
+	big grub plus #s
+
+On iPhone go to http://happyfuntimes.net

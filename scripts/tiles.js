@@ -75,6 +75,25 @@ define([
     ladder: true,
   };
 
+  var tileInfoScreenScrollRed = {
+    collisions: false,
+    //open: tue,
+    screenScroll: true,
+    team: 1, // bit flags bit 0=red, bit 1=blue
+  };
+  var tileInfoScreenScrollBlue = {
+    collisions: false,
+    //open: tue,
+    screenScroll: true,
+    team: 2, // bit flags bit 0=red, bit 1=blue
+  };
+  var tileInfoScreenScrollAll = {
+    collisions: false,
+    //open: tue,
+    screenScroll: true,
+    team: 3, // bit flags bit 0=red, bit 1=blue
+  };
+
   var tileInfoWall = {
     collisions: true,
     solidForAI: true,
@@ -383,9 +402,9 @@ define([
     tileInfoLocalTeleportDest1,   // 0x51
     tileInfoLocalTeleportDest2,   // 0x52
     tileInfoLocalTeleportDest3,   // 0x53
-    nullTile,            // 0x54
-    nullTile,            // 0x55
-    nullTile,            // 0x56
+    tileInfoScreenScrollRed,            // 0x54
+    tileInfoScreenScrollBlue,            // 0x55
+    tileInfoScreenScrollAll,            // 0x56
     nullTile,            // 0x57
     nullTile,            // 0x58
     nullTile,            // 0x59

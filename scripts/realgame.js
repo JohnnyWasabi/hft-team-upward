@@ -558,11 +558,20 @@ window.g = globals;
   }(gl.clear.bind(gl));
 
   var  checkPlayerReachedTop = function(player) {
-    var y = (player.position[1]);
-    if (y > 0 && y < (g_levelHeight - g_yScrollOffset) - (19*32))
+//    var y = (player.position[1]);
+//    if (y > 0 && y < (g_levelHeight - g_yScrollOffset) - (19*32))
+//    {
+//        g_yScrollOffsetTarget = g_yScrollOffset + 19*32;
+//        g_scrollState = 1;
+//    }
+    var tile = g_services.levelManager.getTileInfoByPixel(player.position[0], player.position[1]);
+    if (tile.screenScroll == true)
     {
+      if (tile.team & (1<<player.teamIndex))
+      {
         g_yScrollOffsetTarget = g_yScrollOffset + 19*32;
         g_scrollState = 1;
+      }
     }
     return false;
   }
