@@ -170,6 +170,22 @@ define([
     }
   };
 
+  Level.prototype.RemoveScreenScrollTilesOnScreen = function(levelManager)
+  {
+    var tileY = Math.floor( Math.floor(this.levelHeight - this.yScrollOffset) / this.tileHeight) - 22;
+    var tileYEnd = tileY + 22; //Math.floor(gl.canvas.height / this.tileHeight);
+    for (var yy = tileY; yy < tileYEnd; ++yy) {
+      for (var xx = 0; xx < this.width; ++xx) {
+        var tileId = this.getTile(xx, yy);
+        var info = levelManager.getTileInfo(tileId);
+        if (info.screenScroll)
+        {
+          this.uint16view[(yy * this.width + xx) * 2] = 0;
+        }
+      }
+    }
+    this.dirty = true;
+  }
   Level.prototype.getThings = function(thing) {
     return this.things[thing];
   };

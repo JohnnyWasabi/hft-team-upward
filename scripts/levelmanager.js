@@ -238,6 +238,11 @@ define([
     return this.getTileInfo(tileId);
   }
 
+  LevelManager.prototype.RemoveScreenScrollTilesOnScreen = function()
+  {
+     this.level.RemoveScreenScrollTilesOnScreen(this);
+  }
+
   LevelManager.prototype.draw = function(options) {
     this.level.draw(this, options);
   };

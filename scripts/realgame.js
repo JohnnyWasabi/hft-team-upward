@@ -571,6 +571,13 @@ window.g = globals;
       {
         g_yScrollOffsetTarget = g_yScrollOffset + 19*32;
         g_scrollState = 1;
+        g_services.levelManager.RemoveScreenScrollTilesOnScreen();
+
+        if (player.teamIndex== 0) {
+          g_services.particleEffectManager.spawnBallRedConfetti(player.position[0], player.position[1]);
+        } else {
+          g_services.particleEffectManager.spawnBallBlueConfetti(player.position[0], player.position[1]);
+        }
       }
     }
     return false;
@@ -594,7 +601,7 @@ window.g = globals;
   var setTeamScore = function(teamIndex) {
     if (teamScoreIntsDisplayed[teamIndex] != globals.teamScoreInts[teamIndex]) {
       teamScoreIntsDisplayed[teamIndex] = globals.teamScoreInts[teamIndex];
-      name = teamScoreIntsDisplayed[teamIndex].toString();
+      name = ((teamIndex == 0) ? "Red: " : "Blue: ") + teamScoreIntsDisplayed[teamIndex].toString();
       nameFontOptions.prepFn = function(ctx) {
         var h = (teamIndex == 0) ? 0 : 0.677; //(this.avatar.baseHSV[0] + this.color.h) % 1;
         var s = 1; //gmath.clamp(this.avatar.baseHSV[1] + this.color.s, 0, 1);
@@ -614,7 +621,7 @@ window.g = globals;
       var nameImage = teamScoreImages[teamIndex];
       nameSprite.uniforms.u_texture = nameImage;
       nameSprite.x = ((40*32)/4  + ((40*32)/2 * teamIndex)) * globals.scale;
-      nameSprite.y = 32 * globals.scale;
+      nameSprite.y = 704 * globals.scale;
       nameSprite.width  = nameImage.img.width  * globals.scale;
       nameSprite.height = nameImage.img.height * globals.scale;
     }
